@@ -1,0 +1,15 @@
+{
+  "name": "wheeler-graph-game",
+  "collaborators": [
+    "shibh308 <s17097@tokyo.kosen-ac.jp>"
+  ],
+  "version": "0.1.1",
+  "files": [
+    "wheeler_graph_game_bg.wasm",
+    "wheeler_graph_game.js",
+    "wheeler_graph_game.d.ts"
+  ],
+  "module": "wheeler_graph_game.js",
+  "types": "wheeler_graph_game.d.ts",
+  "sideEffects": false
+}
