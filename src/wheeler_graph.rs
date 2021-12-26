@@ -2,15 +2,16 @@ use rand::distributions::Uniform;
 use rand::rngs::ThreadRng;
 use rand::seq::{IteratorRandom, SliceRandom};
 use rand::{thread_rng, Rng};
+use serde::{Serialize, Serializer};
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 struct WheelerGraphNode {
     label: u8,
     edges: Vec<usize>,
 }
 
-#[derive(Debug)]
-struct WheelerGraph {
+#[derive(Debug, Serialize)]
+pub struct WheelerGraph {
     edge_num: usize,
     label_num: usize,
     nodes: Vec<WheelerGraphNode>,
@@ -51,22 +52,6 @@ impl WheelerGraph {
 
         let mut rng = rand::thread_rng();
 
-        /*
-        let edge_cnt = (0..n)
-            .into_iter()
-            .map(|_x| rng.sample(Uniform::new(edge_low, edge_high + 1)))
-            .collect::<Vec<_>>();
-        let edge_adj = edge_cnt
-            .iter()
-            .map(|&cnt| {
-                let mut v = vec![true; cnt];
-                v.append(&mut vec![false; sigma - cnt]);
-                v.shuffle(&mut rng);
-                v
-            })
-            .collect::<Vec<_>>();
-         */
-
         let spl = gen_split(n, sigma, &mut rng);
 
         for (c, &en) in spl.iter().enumerate() {
@@ -97,12 +82,17 @@ impl WheelerGraph {
         dbg!(&wg);
         wg
     }
-    pub fn size(&mut self) -> usize {
+    pub fn to_string(&self) -> String {
+        serde_json::to_string(self).unwrap()
+    }
+    pub fn size(&self) -> usize {
         self.nodes.len()
     }
 }
 
 #[test]
 fn graph_gen_test() {
-    WheelerGraph::label_distinct_wheeler_graph(6, 2, 1.5, 1.0);
+    let g = WheelerGraph::label_distinct_wheeler_graph(6, 2, 1.5, 1.0);
+    let res = serde_json::to_string(&g).unwrap();
+    println!("{}", res);
 }
